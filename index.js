@@ -47,9 +47,10 @@ define(['widgets'], function(d) {
 
   d.directive('ngNumber', function() {
     return function(scope, el, attrs) {
+      console.log('scope.$parent',scope.$parent);
       var on = scope.$parent.onColor;
       var off = scope.$parent.offColor;
-      el.attr('fill',  digital(scope.number, on, off)[attrs.ngNumber] );
+      el.attr('fill',  digital(scope.number, on, off )[attrs.ngNumber] );
 
     }
   })
@@ -76,9 +77,12 @@ define(['widgets'], function(d) {
     // Templates
     var Template = [
     // svg
+      '<div class="{{class1}}" style="{{style1}}">',
+      '<div class="{{class2}}" style="{{style2}}">{{descr}}</div>',
+      '<div class="{{class3}}" style="{{style3}}">',
       '<svg ng-height="{{height}}">',
       // group
-      '<g height="100%" ng-repeat="number in numbers" on="{{onColor}}"',
+      '<g height="100%" ng-repeat="number in numbers track by $index " on="{{onColor}}"',
       'ng-transform="{{$index}}" index="{{$index}}" scale="{{scale}}">',
       // 0
       '<path d="M 6.07 92.44 L 11.17 87.72 L 42.93 87.71 L 46.71 92.44 L 41.61 96.97 L 9.85 96.79 Z" ng-number="{{0}}" />',
@@ -97,7 +101,7 @@ define(['widgets'], function(d) {
       // dot
       '<path d="M 61.01 84.97 L 61.01 84.97 C 64.3 84.97 67.01 87.66 67.01 90.97 L 67.01 90.97 C 67.01 94.28 64.3 96.97 61.01 96.97 L 61.01 96.97 C 57.69 96.97 55.01 94.28 55.01 90.97 L 55.01 90.97 C 55.01 87.66 57.69 84.97 61.01 84.97 Z" ng-number="{{7}}" />',
       '</g>',
-      '</svg>'
+      '</svg></div></div>'
     ].join('');
     // console.log('template', Template);
 
@@ -116,35 +120,6 @@ define(['widgets'], function(d) {
       }
       return arr;
     }
-    // Group generator
-    function render( led ){
-      // set default on color
-      var on = led.on || '#52FF00';
-      // set default off color
-      var off = led.off || '#414141';
-      // spit and dot replace
-      var arrNums = pointer( led.num.split('') );
-      // set default height
-      var h = led.height || 100;
-      led.height = h;
-      // scale rate
-      var scale = led.height / 100;
-      // set x
-      var x = -70 * scale;
-      // generate group
-      return arrNums.map( function(n){
-        // value place
-        x = x + 70 * scale;
-        return Tpl.g
-          // for debug
-          .replace('{{n}}', n)
-          // put value to group
-          .replace('{{content}}', digital( n, on, off))
-          // move and scale
-          .replace('{{transform}}',
-            'translate(' + x + ', 0) scale('+ scale  + ')' );
-      }).join('');
-    }
 
     // ### controller
     function controller($scope) {
@@ -152,9 +127,9 @@ define(['widgets'], function(d) {
       var widget = $scope.ngModel;
       // updater function
       function updater(){
-        console.log('--- updater');
-        scope.width = widget.get('width');
-        scope.height = widget.get('height')
+        var sensor = widget.get('value');
+        if (debug) console.log('---- sensor', sensor);
+        $scope.numbers = pointer(("" + sensor.status).split(''));
         $scope.$apply();
       }
       // on
@@ -163,47 +138,40 @@ define(['widgets'], function(d) {
 
     // ### link
     function link(scope, el, attr) {
-      scope.numbers = " ".split('');
-      // widget model
       var widget = scope.ngModel;
-      console.log('model',scope.ngModel.toJSON() );
-      // height scale
+      if (debug) console.log('ngModel', widget);
+      // height
       scope.height = widget.get('height') || 100;
-      var scale = scope.height / 100;
-
-      // get value
-      if (widget.get('value'))
-        var value = widget.get('value').status;
-      else
-        value = "0";
-
-      scope.width = widget.get('width') || 0;
-      scope.height = widget.get('height') || 100;
-      // scale
+      // scale 4 resize
       scope.scale = scope.height / 100;
-      scope.numbers = "123".split('');
+      // value
+      scope.value = widget.get('value');
+      // on color
       scope.onColor = widget.get('color');
-      scope.offColor = widget.get('inactive_color');
-
-      // widget model
-      var widget = scope.ngModel;
-      var h = widget.height || 100;
-      var l = pointer( value.split('') ).length;
-      var width = 70 * h / 100 * pointer( value.split('')).length;
-      scope.transform = function(index){
-        console.log('index', index);
-        return 'translate(' + 70 * index +', 0) scale(' + scale + ')'
-      }
+      // off color
+      // scope.offColor = widget.get('inactive_color');
+      scope.offColor = '#fff';
+      // description
+      scope.descr = widget.get('descr');
+      // class2
+      scope.class2 = widget.get('class2');
+      scope.class1 = widget.get('class1');
+      // class2
+      scope.style1 = widget.get('style1');
+      scope.style2 = widget.get('style2');
+      scope.style3 = widget.get('style3');
+      if (scope.value && scope.value.status)
+        scope.numbers = pointer(scope.value.status);
+      else
+        scope.numbers =[' '];
     }
 
     return {
       restrict: 'E',
       priority : 10,
-      scope: {
-        ngModel:"="
-      },
+      scope: { ngModel:"=" },
       template: Template,
-      // controller: controller,
+      controller: controller,
       link: link
     }
   });
