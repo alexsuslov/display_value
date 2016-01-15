@@ -47,7 +47,6 @@ define(['widgets'], function(d) {
 
   d.directive('ngNumber', function() {
     return function(scope, el, attrs) {
-      // console.log('scope.$parent',scope.$parent);
       var on = scope.$parent.onColor;
       var off = scope.$parent.offColor;
       el.attr('fill',  digital(scope.number, on, off )[attrs.ngNumber] );
@@ -149,8 +148,8 @@ define(['widgets'], function(d) {
       // on color
       scope.onColor = widget.get('color');
       // off color
-      scope.offColor = widget.get('inactive_color');
-      // scope.offColor = '#fff';
+      // scope.offColor = widget.get('inactive_color');
+      scope.offColor = '#fff';
       // description
       scope.descr = widget.get('descr');
 
@@ -164,7 +163,7 @@ define(['widgets'], function(d) {
       scope.style2 = widget.get('style2');
       scope.style3 = widget.get('style3');
       if (scope.value && scope.value.status)
-        scope.numbers = pointer(scope.value.status);
+        scope.numbers = pointer(("" + sensor.status).split(''));
       else
         scope.numbers =[' '];
     }
