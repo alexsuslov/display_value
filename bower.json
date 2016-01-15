@@ -1,0 +1,20 @@
+{
+  "name": "IoTManager-Display-Value",
+  "authors": [
+    "Alex Suslov <suslov@me.com>"
+  ],
+  "description": "IoTManager Display-Value widget",
+  "main": "index.js",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

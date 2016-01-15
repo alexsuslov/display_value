@@ -1,0 +1,4 @@
+# Demo widget "Display value"
+
+
+
