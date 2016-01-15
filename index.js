@@ -47,7 +47,7 @@ define(['widgets'], function(d) {
 
   d.directive('ngNumber', function() {
     return function(scope, el, attrs) {
-      console.log('scope.$parent',scope.$parent);
+      // console.log('scope.$parent',scope.$parent);
       var on = scope.$parent.onColor;
       var off = scope.$parent.offColor;
       el.attr('fill',  digital(scope.number, on, off )[attrs.ngNumber] );
