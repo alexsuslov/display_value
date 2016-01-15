@@ -149,14 +149,17 @@ define(['widgets'], function(d) {
       // on color
       scope.onColor = widget.get('color');
       // off color
-      // scope.offColor = widget.get('inactive_color');
-      scope.offColor = '#fff';
+      scope.offColor = widget.get('inactive_color');
+      // scope.offColor = '#fff';
       // description
       scope.descr = widget.get('descr');
-      // class2
+
+      // class
+      scope.class3 = widget.get('class3');
       scope.class2 = widget.get('class2');
       scope.class1 = widget.get('class1');
-      // class2
+
+      // style
       scope.style1 = widget.get('style1');
       scope.style2 = widget.get('style2');
       scope.style3 = widget.get('style3');
