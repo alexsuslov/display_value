@@ -163,7 +163,8 @@ define(['widgets'], function(d) {
       scope.style2 = widget.get('style2');
       scope.style3 = widget.get('style3');
       if (scope.value && scope.value.status)
-        scope.numbers = pointer(("" + sensor.status).split(''));
+
+        scope.numbers = pointer(("" + scope.value.status).split(''));
       else
         scope.numbers =[' '];
     }
