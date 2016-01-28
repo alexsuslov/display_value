@@ -39,7 +39,7 @@ digital = (chr, On, Off) ->
     if c & 0b01000000 then On else Off
     if c & 0b10000000 then On else Off
   ]
-angular.module 'widgets'
+angular.module 'widgets',[]
 
 .directive 'ngNumber', ->
   (scope, el, attrs) ->
@@ -55,9 +55,9 @@ angular.module 'widgets'
 .directive 'ngTransform', ->
   (scope, el, attrs) ->
     translate = 70 * Number(attrs.index) * Number(attrs.scale)
-    el.attr 'transform', "translate( ${translate}, 0) scale(${attrs.scale})"
+    el.attr 'transform', "translate( #{translate}, 0) scale(#{attrs.scale})"
 
-.directive 'displayvalue', ->
+.directive 'displayValue', ->
   # Templates
   Template = '''
 <div class="{{class1}}" style="{{style1}}">
@@ -77,7 +77,7 @@ angular.module 'widgets'
       </g>
     </svg>
   </div>
-div>'''
+<div>'''
 
   # add pointer to char
   # ["1",".", "3"] => ["1."+"3"]
@@ -115,8 +115,8 @@ div>'''
 
   link = (scope, el, attr) ->
     widget = scope.ngModel
-    if debug
-      console.log 'ngModel', widget
+    # if debug
+    console.log 'ngModel', widget
     # height
     scope.height = widget.get('height') or 100
     # scale 4 resize
