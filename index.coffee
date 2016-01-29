@@ -1,4 +1,4 @@
-angular.module('widgets', [])
+angular.module('widgets')
 
 .directive 'displayValue', ($compile) ->
   # viewBox="0 0 114 170"
