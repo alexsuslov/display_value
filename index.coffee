@@ -1,6 +1,6 @@
-angular.module('widgets')
+angular.module('im.widgets', [])
 
-.directive 'displayValue', ($compile) ->
+.directive 'displayValue', () ->
   # viewBox="0 0 114 170"
   Tpl =
     svg: '<svg width="{{width}}" height="{{height}}">{{content}}</svg>'
@@ -46,6 +46,9 @@ angular.module('widgets')
       '9.': 0b11110111
       '-': 0b00000100
       ' ': 0b00000000
+            #76543210
+      'C': 0b01101001
+      '°': 0b01110100
     c = chars[chr]
     # var c = 0b11111111;
     [
@@ -83,28 +86,20 @@ angular.module('widgets')
     ).join ''
 
 
-  controller = ($scope, $element)->
-    config = (cfg)->
+  controller = ['$scope', '$element', ($scope, $element)->
+    Render = (cfg)->
       cfg.height ?= 100
-      cfg.color ?='#52FF00'
-      cfg.inactive_color ?= '#343434'
-      # console.log 'cfg', cfg
+      cfg.color ?='#404447'
+      cfg.inactive_color ?= '#BCD3ED'
 
-      $scope.ngModel.on 'change', =>
-        cfg.number = $scope.ngModel.get('value').status
-        # console.log 'number', cfg.number
-        cfg.arNumber = pointer ('' + cfg.number).split('')
-        # console.log 'arNumber', cfg.arNumber
-        cfg.scale = cfg.height / 100
-        width = 70 * cfg.scale * cfg.arNumber.length
-        $scope.config = cfg
+      cfg.arNumber = pointer ('' + cfg.value).split('')
+      cfg.scale = cfg.height / 100
+      width = 70 * cfg.scale * cfg.arNumber.length
 
-        # console.log render(cfg)
-
-        svg = Tpl.svg.replace('{{width}}', width)
-            .replace('{{height}}', cfg.height)
-            .replace('{{content}}', render(cfg))
-        $element.html """
+      svg = Tpl.svg.replace('{{width}}', width)
+          .replace('{{height}}', cfg.height)
+          .replace('{{content}}', render(cfg))
+      $element.html """
 <div class="#{cfg.class1}" style="#{cfg.style1}">
   <div class="#{cfg.class2}" style="#{cfg.style2}" >
     #{cfg.descr}
@@ -114,10 +109,9 @@ angular.module('widgets')
   </div>
 </div>"""
 
-    $scope.$watch 'ngModel', =>
-      config( $scope.ngModel.data() )
-
-
+    $scope.$watch 'ngModel.value', (val)->
+      Render $scope.ngModel
+  ]
   {
     # replace: true
     restrict: 'E'
